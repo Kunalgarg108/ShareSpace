@@ -283,13 +283,9 @@ export default function Post({ post }) {
             )}
           </div>
         </CardContent>
-
-        {/* Post image */}
         <div className="w-full h-96 bg-gray-800 overflow-hidden">
           <img src={post.image} alt="Post content" className="w-full h-full object-cover" />
         </div>
-
-        {/* Post actions */}
         <CardContent className="space-y-4 pt-3">
           <div className="flex items-center justify-between">
             <div className="flex space-x-4">
