@@ -23,6 +23,14 @@ function EditProfile() {
     const [gender, setGender] = useState(user?.gender || "");
     const HandleEditProfile = async (e) => {
         e.preventDefault();
+        if (!bio.trim()) {
+            toast.error("Please enter your bio.");
+            return;
+        }
+        if (!gender) {
+            toast.error("Please select your gender.");
+            return;
+        }
         try {
             setLoading(true);
             const formData = new FormData();
@@ -122,7 +130,7 @@ function EditProfile() {
                             <div className="flex items-center gap-4">
                                 <Avatar className="w-16 h-16 rounded-full overflow-hidden bg-yellow-50">
                                     {user?.profilePicture ? (
-                                        <AvatarImage src={user.profilePicture} className="w-full h-full object-cover rounded-full"/>
+                                        <AvatarImage src={user.profilePicture} className="w-full h-full object-cover rounded-full" />
                                     ) : (
                                         <AvatarFallback>
                                             {user?.username?.slice(0, 2).toUpperCase()}
