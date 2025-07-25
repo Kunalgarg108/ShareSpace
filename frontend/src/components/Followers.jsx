@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuthUser } from "@/redux/authSlice";
+import { toast } from "react-toastify";
 
 export default function Followers() {
   const { id: userId } = useParams();
   const [followers, setFollowers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState(null);
+
+  const currentUser = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const url = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
     const fetchFollowers = async () => {
       try {
-        const res = await axios.get(`${url}/api/v1/user/followers/${userId}`, { withCredentials: true });
+        const res = await axios.get(`${url}/api/v1/user/followers/${userId}`, {
+          withCredentials: true,
+        });
         setFollowers(res.data.followers);
       } catch (err) {
         console.error("Failed to fetch followers:", err);
@@ -26,7 +35,26 @@ export default function Followers() {
     fetchFollowers();
   }, [userId]);
 
-  // Filter followers based on search query
+  const handleFollowToggle = async (targetId) => {
+    setUpdatingId(targetId);
+    try {
+      const res = await axios.put(
+        `${url}/api/v1/user/followorunfollow/${targetId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        const isNowFollowing = res.data.user.following.includes(targetId);
+        toast.success(isNowFollowing ? "Followed user" : "Unfollowed user");
+        dispatch(setAuthUser(res.data.user));
+      }
+    } catch (err) {
+      toast.error("Failed to update follow status");
+    }
+    setUpdatingId(null);
+  };
+
   const filteredFollowers = followers.filter(
     (user) =>
       user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -48,16 +76,18 @@ export default function Followers() {
       </div>
 
       {/* Results */}
-      <div className="space-y-4 overflow-y-auto max-h-[500px]">
+      <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-200px)]">
         {loading ? (
           <p className="text-center text-gray-500">Loading followers...</p>
         ) : filteredFollowers.length > 0 ? (
-          filteredFollowers.map((user) => (
-            <div
-              key={user._id}
-              className="flex items-center justify-between bg-white text-black rounded-lg shadow p-2"
-            >
-              <div className="flex items-center">
+          filteredFollowers.map((user) => {
+            const isFollowing = currentUser?.following?.includes(user._id);
+            return (
+              <div
+                key={user._id}
+                className="flex items-center justify-between bg-white text-black rounded-lg shadow p-2"
+              >
+                <div className="flex items-center">
                   <Avatar className="w-12 h-12 mr-4 rounded-full overflow-hidden border border-gray-200">
                     {user.profilePicture ? (
                       <AvatarImage
@@ -75,14 +105,37 @@ export default function Followers() {
                       </AvatarFallback>
                     )}
                   </Avatar>
-                <div>
-                  <p className="font-medium">{user.username}</p>
-                  {user.name && <p className="text-gray-500 text-sm">{user.name}</p>}
+                  <div>
+                    <p className="font-medium">{user.username}</p>
+                    {user.name && (
+                      <p className="text-gray-500 text-sm">{user.name}</p>
+                    )}
+                  </div>
                 </div>
+
+                {/* Follow/Following Button */}
+                {user._id !== currentUser?._id && (
+                  <button
+                    onClick={() => handleFollowToggle(user._id)}
+                    disabled={updatingId === user._id}
+                    className={`text-sm font-semibold px-3 py-1 rounded border ${
+                      isFollowing
+                        ? "text-green-500 border-green-500"
+                        : "text-blue-500 border-blue-500"
+                    }`}
+                  >
+                    {updatingId === user._id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : isFollowing ? (
+                      "Following"
+                    ) : (
+                      "Follow"
+                    )}
+                  </button>
+                )}
               </div>
-              {/* Remove button can be implemented later if required */}
-            </div>
-          ))
+            );
+          })
         ) : (
           <p className="text-gray-500 text-center">No followers found.</p>
         )}

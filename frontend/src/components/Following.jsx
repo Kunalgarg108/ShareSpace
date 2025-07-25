@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { setAuthUser } from "@/redux/authSlice";
 
 export default function Following() {
   const { id: userId } = useParams();
   const [following, setFollowing] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [unfollowingUserId, setUnfollowingUserId] = useState(null); // to track loading per user
+  const dispatch = useDispatch();
+
   const url = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
@@ -27,6 +33,27 @@ export default function Following() {
 
     fetchFollowing();
   }, [userId]);
+
+  const handleUnfollow = async (targetId) => {
+    setUnfollowingUserId(targetId);
+    try {
+      const res = await axios.put(
+        `${url}/api/v1/user/followorunfollow/${targetId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        toast.success("Unfollowed successfully");
+        // remove user from local following list
+        setFollowing((prev) => prev.filter((user) => user._id !== targetId));
+        dispatch(setAuthUser(res.data.user)); // update logged-in user state
+      }
+    } catch (err) {
+      toast.error("Failed to unfollow user");
+    }
+    setUnfollowingUserId(null);
+  };
 
   const filteredFollowing = following.filter(
     (user) =>
@@ -49,7 +76,7 @@ export default function Following() {
       </div>
 
       {/* Results */}
-      <div className="space-y-4 overflow-y-auto max-h-[500px]">
+      <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-200px)]">
         {loading ? (
           <p className="text-center text-gray-500">Loading following...</p>
         ) : filteredFollowing.length > 0 ? (
@@ -83,6 +110,17 @@ export default function Following() {
                   )}
                 </div>
               </div>
+              <button
+                onClick={() => handleUnfollow(user._id)}
+                className="text-red-500 font-semibold border border-red-500 text-sm px-3 py-1 rounded"
+                disabled={unfollowingUserId === user._id}
+              >
+                {unfollowingUserId === user._id ? (
+                  <Loader2 className="animate-spin h-4 w-4" />
+                ) : (
+                  "Unfollow"
+                )}
+              </button>
             </div>
           ))
         ) : (

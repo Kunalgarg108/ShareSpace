@@ -16,14 +16,19 @@ function Sidebar() {
     //   return;
     // }
     dispatch(getUserSuggestions());
-  }, [ dispatch]);
+  }, [dispatch]);
 
   return (
     <div className="space-y-2 p-4 bg-black border border-gray-800 rounded text-white">
       <h2 className="text-lg font-semibold">Suggested for you</h2>
       {suggestedUsers.length > 0 ? (
         suggestedUsers
-          .filter((user) => user._id !== currentUser._id) // ✅ exclude self
+          .filter(
+            (user) =>
+              user._id !== currentUser._id &&
+              !currentUser.following?.includes(user._id) // ✅ exclude already-followed users
+          )
+          .slice(0, 8) // ✅ take top 8 unfollowed users
           .map((user) => (
             <SuggestedUserCard key={user._id} user={user} />
           ))
