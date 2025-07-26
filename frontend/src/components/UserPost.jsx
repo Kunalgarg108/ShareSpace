@@ -52,9 +52,9 @@ const UserPost = ({ userId }) => {
                 loading="lazy"
               />
               {/* Likes overlay on hover */}
-              <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <div className="absolute inset-0 flex items-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
                 <span className="text-white text-lg font-semibold">
-                  ❤️ {post.likes.length} Likes
+                  <p className="ml-21">Likes: ❤️{post.likes.length}</p>
                 </span>
               </div>
             </div>

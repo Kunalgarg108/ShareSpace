@@ -53,9 +53,9 @@ const SavedPost = ({ userId }) => {
                 className="absolute inset-0 h-full w-full object-cover"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <div className="absolute inset-0 bg-black/50 flex items-center opacity-0 group-hover:opacity-100 transition">
                 <span className="text-white text-lg font-semibold">
-                  ❤️ {post.likes.length} Likes
+                  <p className="ml-21">Likes: ❤️{post.likes.length}</p>
                 </span>
               </div>
             </div>
