@@ -36,7 +36,6 @@ const Messages = ({ selectedUser }) => {
                     </Link>
                 </div>
             </div>
-
             {/* Messages */}
             <div className='flex flex-col gap-3'>
                 {
@@ -49,10 +48,19 @@ const Messages = ({ selectedUser }) => {
                                 key={msg._id}
                                 className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}
                             >
-                                <div className={`p-2 rounded-lg max-w-xs break-words relative ${isMine ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'}`}>
+                                <div className={`
+  relative p-2 rounded-lg max-w-xs break-words 
+  ${isMine
+                                        ? 'bg-blue-600 text-white ml-auto rounded-tr-none after:right-[-6px] after:border-blue-600'
+                                        : 'bg-green-600 text-white mr-auto rounded-tl-none after:left-[-6px] after:border-green-600'}
+  after:content-[''] after:absolute after:top-2 after:w-0 after:h-0 
+  after:border-t-[10px] after:border-b-[10px] 
+  after:border-l-[10px] after:border-transparent
+`}>
                                     <div>{msg.text}</div>
                                     <div className="text-xs text-gray-200 mt-1 text-right">{timeString}</div>
                                 </div>
+
                             </div>
                         )
                     })
