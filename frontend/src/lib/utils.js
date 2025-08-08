@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge"
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -10,7 +10,7 @@ export const checkAbusiveContent = async (text) => {
   const PERSPECTIVE_API_KEY = import.meta.env.VITE_PERSPECTIVE_API_KEY;
   const PERSPECTIVE_URL = import.meta.env.VITE_PERSPECTIVE_URL;
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${PERSPECTIVE_URL}?key=${PERSPECTIVE_API_KEY}`,
       {
         comment: { text },
@@ -41,6 +41,6 @@ export const checkAbusiveContent = async (text) => {
     return {
       error: "Failed to check content. Please try again later.",
       message: error.response?.data?.message || "An error occurred while checking content."
-    } // Default to false if there's an error
+    }
   }
 }

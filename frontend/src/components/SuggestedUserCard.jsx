@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getUserSuggestions } from "@/redux/authActions";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "react-toastify";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
@@ -25,7 +25,7 @@ function SuggestedUserCard({ user }) {
   const handleFollow = async () => {
     setLoading(true);
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${url}/api/v1/user/followorunfollow/${user._id}`,
         {},
         { withCredentials: true }
@@ -35,7 +35,7 @@ function SuggestedUserCard({ user }) {
         toast.success(isFollowing ? "Unfollowed user" : "Followed user successfully");
         setIsFollowing(!isFollowing);
         dispatch(getUserSuggestions());
-        dispatch(setAuthUser(res.data.user)); // keep auth user updated
+        dispatch(setAuthUser(res.data.user));
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update follow status");

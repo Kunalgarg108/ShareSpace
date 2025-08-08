@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, X } from "lucide-react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -15,7 +15,7 @@ export default function SearchBox() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get(`${url}/api/v1/user/getallusers`, {
+        const res = await axiosInstance.get(`${url}/api/v1/user/getallusers`, {
           withCredentials: true,
         });
         if (res.data.success) {

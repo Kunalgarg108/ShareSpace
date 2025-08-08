@@ -6,15 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const suggestedUsers = useSelector((state) => state.auth.suggestedUsers);
-  const currentUser = useSelector((state) => state.auth.user); // ✅ get current user
+  const currentUser = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    // if (!currentUser) {
-    //   navigate("/login");
-    //   return;
-    // }
     dispatch(getUserSuggestions());
   }, [dispatch]);
 
@@ -26,9 +21,9 @@ function Sidebar() {
           .filter(
             (user) =>
               user._id !== currentUser._id &&
-              !currentUser.following?.includes(user._id) // ✅ exclude already-followed users
+              !currentUser.following?.includes(user._id) 
           )
-          .slice(0, 8) // ✅ take top 8 unfollowed users
+          .slice(0, 8)
           .map((user) => (
             <SuggestedUserCard key={user._id} user={user} />
           ))

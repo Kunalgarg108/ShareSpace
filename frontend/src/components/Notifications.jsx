@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -21,7 +21,7 @@ export default function Notifications() {
     const fetchNotifications = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${url}/api/v1/notifications`, { withCredentials: true });
+            const res = await axiosInstance.get(`${url}/api/v1/notifications`, { withCredentials: true });
 
             if (res.data.success) {
                 setNotifications(res.data.notifications);

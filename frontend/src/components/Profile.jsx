@@ -7,7 +7,7 @@ import { setAuthUser, setUserProfile } from "@/redux/authSlice";
 import UserPost from "./UserPost";
 import SavedPost from "./SavedPost";
 import { toast } from "react-toastify";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { persistor } from "@/redux/store";
 import useGetUserProfile from "@/hooks/useGetUserProfile";
 import { Loader2 } from "lucide-react";
@@ -35,7 +35,7 @@ export default function Profile() {
     const formData = new FormData();
     formData.append("profilePicture", file);
     try {
-      const res = await axios.put(`${url}/api/v1/user/profile/edit`, formData, {
+      const res = await axiosInstance.put(`${url}/api/v1/user/profile/edit`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
@@ -57,7 +57,7 @@ export default function Profile() {
   };
   const handleFollowOrUnfollow = async () => {
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${url}/api/v1/user/followorunfollow/${userProfile._id}`,
         {},
         { withCredentials: true }
@@ -66,7 +66,7 @@ export default function Profile() {
       if (res.data.success) {
         toast.success(isFollowing ? "Unfollowed user" : "Followed user successfully");
         setIsFollowing(!isFollowing);
-        dispatch(setAuthUser(res.data.user)); // update logged-in user data
+        dispatch(setAuthUser(res.data.user));
       }
       else {
         toast.error(res.data.message || "Failed to update follow status");

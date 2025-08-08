@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle } from "./ui/card";
 import { CardContent } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { setAuthUser, setUserProfile } from "@/redux/authSlice";
 import { toast } from "react-toastify";
 
@@ -34,23 +34,16 @@ function EditProfile() {
         try {
             setLoading(true);
             const formData = new FormData();
-
-            // append optional image if selected
             if (imageRef.current.files[0]) {
                 formData.append("profilePicture", imageRef.current.files[0]);
             }
-
-            // append other form fields // or newUsername if editable input exists
             if (bio !== user.bio) {
                 formData.append("bio", bio);
             }
-
-            // append gender only if changed
             if (gender !== user.gender) {
                 formData.append("gender", gender);
-            }         // gender state variable you'll need to manage
-
-            const res = await axios.put(`${url}/api/v1/user/profile/edit`, formData, {
+            }        
+            const res = await axiosInstance.put(`${url}/api/v1/user/profile/edit`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -58,7 +51,7 @@ function EditProfile() {
             });
 
             if (res.data.success) {
-                dispatch(setAuthUser(res.data.user));        // update auth user
+                dispatch(setAuthUser(res.data.user));      
                 dispatch(setUserProfile(res.data.user));
                 console.log("Profile updated");
                 toast.success("Profile updated successfully!");

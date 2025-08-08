@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import axiosInstance from '@/utils/axiosInstance';
 import { toast } from 'react-toastify'
 import EmojiPicker from "emoji-picker-react";
 import { Smile } from "lucide-react"; // for the smile icon
@@ -65,7 +65,7 @@ function CreatePost() {
             return;
         }
         try {
-            const res = await axios.post(`${url}/api/v1/post/addpost`, formData, {
+            const res = await axiosInstance.post(`${url}/api/v1/post/addpost`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

@@ -1,4 +1,4 @@
-import React, { use } from 'react'
+import React from 'react'
 import Post from './Post';
 import useGetAllPost from '@/hooks/useGetAllPost';
 import { useSelector } from 'react-redux';

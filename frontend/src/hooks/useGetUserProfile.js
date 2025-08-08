@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { useDispatch } from "react-redux";
 import { setUserProfile } from "@/redux/authSlice";
 
@@ -12,7 +12,7 @@ const useFetchUserProfile = (userId) => {
 
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get(`${url}/api/v1/user/${userId}/profile`, {
+        const response = await axiosInstance.get(`${url}/api/v1/user/${userId}/profile`, {
           withCredentials: true,
         });
 

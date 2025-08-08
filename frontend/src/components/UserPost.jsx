@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import Post from "@/components/Post";
 import { X } from "lucide-react";
 
@@ -11,7 +11,7 @@ const UserPost = ({ userId }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`${url}/api/v1/post/user/${userId}/posts`, {
+        const res = await axiosInstance.get(`${url}/api/v1/post/user/${userId}/posts`, {
           withCredentials: true,
         });
         if (res.data.success) {

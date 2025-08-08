@@ -1,11 +1,11 @@
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { setSuggestedUsers } from "@/redux/authSlice";
 import { toast } from "react-toastify";
 
 export const getUserSuggestions = () => async (dispatch) => {
   const url = import.meta.env.VITE_API_URL || "http://localhost:3000";
   try {
-    const res = await axios.get(`${url}/api/v1/user/suggested`, {
+    const res = await axiosInstance.get(`${url}/api/v1/user/suggested`, {
       withCredentials: true,
     });
 

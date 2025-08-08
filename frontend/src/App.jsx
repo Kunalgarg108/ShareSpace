@@ -1,4 +1,4 @@
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -31,10 +31,6 @@ function App() {
     toast.success("Logged in successfully!");
   };
   useEffect(() => {
-    if(!user) {
-      navigate("/login");
-      return;
-    }
     if (user) {
       const socketio = io("http://localhost:3000", {
         query: { userId: user._id },

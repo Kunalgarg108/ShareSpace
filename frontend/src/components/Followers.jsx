@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { Search, Loader2 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -21,7 +21,7 @@ export default function Followers() {
   useEffect(() => {
     const fetchFollowers = async () => {
       try {
-        const res = await axios.get(`${url}/api/v1/user/followers/${userId}`, {
+        const res = await axiosInstance.get(`${url}/api/v1/user/followers/${userId}`, {
           withCredentials: true,
         });
         setFollowers(res.data.followers);
@@ -38,7 +38,7 @@ export default function Followers() {
   const handleFollowToggle = async (targetId) => {
     setUpdatingId(targetId);
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${url}/api/v1/user/followorunfollow/${targetId}`,
         {},
         { withCredentials: true }

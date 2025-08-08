@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { Search, Loader2 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -20,7 +20,7 @@ export default function Following() {
   useEffect(() => {
     const fetchFollowing = async () => {
       try {
-        const res = await axios.get(`${url}/api/v1/user/following/${userId}`, {
+        const res = await axiosInstance.get(`${url}/api/v1/user/following/${userId}`, {
           withCredentials: true,
         });
         setFollowing(res.data.following);
@@ -37,7 +37,7 @@ export default function Following() {
   const handleUnfollow = async (targetId) => {
     setUnfollowingUserId(targetId);
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${url}/api/v1/user/followorunfollow/${targetId}`,
         {},
         { withCredentials: true }
@@ -45,9 +45,8 @@ export default function Following() {
 
       if (res.data.success) {
         toast.success("Unfollowed successfully");
-        // remove user from local following list
         setFollowing((prev) => prev.filter((user) => user._id !== targetId));
-        dispatch(setAuthUser(res.data.user)); // update logged-in user state
+        dispatch(setAuthUser(res.data.user));
       }
     } catch (err) {
       toast.error("Failed to unfollow user");

@@ -14,7 +14,7 @@ import {
 import VoiceControlDialog from "./ui/VioceControlDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { useSelector } from "react-redux";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 
 function Navbar({ onLogout }) {
   const url = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -60,7 +60,7 @@ function Navbar({ onLogout }) {
     } else {
       if (item.text === "Notifications") {
         try {
-          await axios.put(`${url}/api/v1/notifications/markasread`, {}, { withCredentials: true });
+          await axiosInstance.put(`${url}/api/v1/notifications/markasread`, {}, { withCredentials: true });
           setUnreadCount(0);
         } catch (err) {
           console.error("Error marking notifications as read", err);
@@ -80,7 +80,7 @@ function Navbar({ onLogout }) {
   useEffect(() => {
     const fetchUnreadCount = async () => {
       try {
-        const res = await axios.get(`${url}/api/v1/notifications/unread/count`, {
+        const res = await axiosInstance.get(`${url}/api/v1/notifications/unread/count`, {
           withCredentials: true,
         });
         if (res.data.success) {

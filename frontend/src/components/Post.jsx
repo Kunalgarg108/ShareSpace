@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem
 } from "@/components/ui/dropdown-menu";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "react-toastify";
 import { setPosts } from "@/redux/postSlice";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -54,7 +54,7 @@ export default function Post({ post }) {
 
   const handleDeletePost = async () => {
     try {
-      const res = await axios.delete(`${url}/api/v1/post/delete/${post?._id}`, { withCredentials: true });
+      const res = await axiosInstance.delete(`${url}/api/v1/post/delete/${post?._id}`, { withCredentials: true });
       if (res.data.success) {
         toast.success("Post deleted successfully");
         const updatedPosts = posts.filter((p) => p._id !== post?._id);
@@ -72,7 +72,7 @@ export default function Post({ post }) {
     if (editImage) formData.append("image", editImage);
 
     try {
-      const res = await axios.post(`${url}/api/v1/post/addpost`, formData, {
+      const res = await axiosInstance.post(`${url}/api/v1/post/addpost`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
@@ -91,7 +91,7 @@ export default function Post({ post }) {
 
   const likeOrUnlikePostHandler = async () => {
     try {
-      const res = await axios.post(`${url}/api/v1/post/${post._id}/like`, {}, { withCredentials: true });
+      const res = await axiosInstance.post(`${url}/api/v1/post/${post._id}/like`, {}, { withCredentials: true });
       if (res.data.success) {
         setLikesCount(res.data.likes.length);
         setLiked(res.data.isLiked);
@@ -113,17 +113,14 @@ export default function Post({ post }) {
   };
   const handleBookmark = async () => {
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${url}/api/v1/post/${post._id}/bookmark`,
         {},
         { withCredentials: true }
       );
 
       if (res.data.success) {
-        // setBookmark(res.data.isBookmarked);
         toast.success(res.data.message);
-
-        // Update posts manually here
         const updatedPosts = posts.map((p) =>
           p._id === post._id ? { ...p, isBookmarked: res.data.isBookmarked } : p
         );
@@ -151,7 +148,7 @@ export default function Post({ post }) {
       return;
     }
     try {
-      const res = await axios.post(
+      const res = await axiosInstance.post(
         `${url}/api/v1/post/${post._id}/comment`,
         { text },
         { withCredentials: true }
@@ -173,7 +170,7 @@ export default function Post({ post }) {
   };
   const handleFollowOrUnfollow = async () => {
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${url}/api/v1/user/followorunfollow/${post.author._id}`,
         {},
         { withCredentials: true }
@@ -183,7 +180,7 @@ export default function Post({ post }) {
         toast.success(isFollowing ? "Unfollowed user" : "Followed user successfully");
         setIsFollowing(!isFollowing);
         dispatch(getUserSuggestions());
-        dispatch(setAuthUser(res.data.user)); // update logged-in user data
+        dispatch(setAuthUser(res.data.user));
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update follow status");

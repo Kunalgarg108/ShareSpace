@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { MessageCircleCode, Smile } from 'lucide-react';
 import Messages from './Messages';
-import axios from 'axios';
+import axiosInstance from '@/utils/axiosInstance';
 import { setMessages } from '@/redux/chatSlice';
 import EmojiPicker from "emoji-picker-react";
 import { checkAbusiveContent } from '@/lib/utils';
@@ -25,14 +25,13 @@ const ChatPage = () => {
 
   const sendMessageHandler = async (receiverId) => {
     try {
-      // Check for abusive content first
       const isValid = await checkAbusiveContent(textMessage);
       if (isValid) {
         toast.error("Your message contains abusive content.");
         return;
       }
 
-      const res = await axios.post(`${url}/api/v1/message/send/${receiverId}`, { textMessage }, {
+      const res = await axiosInstance.post(`${url}/api/v1/message/send/${receiverId}`, { textMessage }, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });
@@ -57,7 +56,7 @@ const ChatPage = () => {
   useEffect(() => {
     const fetchRecentChats = async () => {
       try {
-        const res = await axios.get(`${url}/api/v1/message/conversations`, { withCredentials: true });
+        const res = await axiosInstance.get(`${url}/api/v1/message/conversations`, { withCredentials: true });
         if (res.data.success) {
           setRecentChats(res.data.recentChats);
         }
@@ -175,11 +174,9 @@ const ChatPage = () => {
               >
                 <Smile className="w-5 h-5 text-gray-300 hover:text-gray-500" />
               </button>
-
               <Button className='hover:bg-blue-500 bg-gray-600 ml-2' onClick={() => sendMessageHandler(selectedUser?._id)}>
                 Send
               </Button>
-
               {showPicker && (
                 <div className="absolute bottom-16 right-4 z-50">
                   <EmojiPicker

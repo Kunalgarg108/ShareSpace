@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import axios from "axios";
-import { toast } from "react-toastify";     // ✅ Corrected here
+import axiosInstance from "@/utils/axiosInstance";
+import { toast } from "react-toastify";   
 import "react-toastify/dist/ReactToastify.css"; // ✅ make sure it's imported once in your app (if not already)
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -49,7 +49,7 @@ const Login = () => {
       }
       try {
         setLoading(true);
-        const res = await axios.post(
+        const res = await axiosInstance.post(
           `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/v1/user/register`,
           input,
           { withCredentials: true }
@@ -67,7 +67,7 @@ const Login = () => {
       }
       try {
         setLoading(true);
-        const res = await axios.post(
+        const res = await axiosInstance.post(
           `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/v1/user/login`,
           { email: input.email, password: input.password },
           {

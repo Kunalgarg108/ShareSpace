@@ -163,14 +163,12 @@ export const getSuggestedUsers = async (req, res) => {
       if (suggestedUsers.length > 0) {
         matchStage._id = { $nin: [...suggestedUsers.map(u => u._id), userId] };
       }
-
       randomUsers = await User.aggregate([
         { $match: matchStage },
         { $sample: { size: remainingCount } },
         { $project: { password: 0, __v: 0 } }
       ]);
     }
-    // Merge both arrays
     const finalUsers = [...suggestedUsers, ...randomUsers];
     return res.status(200).json({ success: true, finalUsers });
   } catch (error) {
@@ -187,7 +185,6 @@ export const followOrUnfollowUser = async (req, res) => {
     if (followersId === followingId) {
       return res.status(400).json({ success: false, message: "You cannot follow or unfollow yourself" });
     }
-
     const user = await User.findById(followersId).select('-password');
     const TargetUser = await User.findById(followingId);
 
@@ -196,7 +193,6 @@ export const followOrUnfollowUser = async (req, res) => {
     }
 
     if (user.following.includes(followingId)) {
-      // Unfollow
       user.following = user.following.filter(id => id.toString() !== followingId);
       TargetUser.followers = TargetUser.followers.filter(id => id.toString() !== followersId);
 
@@ -208,20 +204,17 @@ export const followOrUnfollowUser = async (req, res) => {
       return res.status(200).json({ success: true, message: "Unfollowed successfully", user: updatedUser });
 
     } else {
-      // Follow
       user.following.push(followingId);
       TargetUser.followers.push(followersId);
 
       await user.save();
       await TargetUser.save();
-
-      // ✅ Create notification for follow action
       await createNotification(
-        followingId,  // user to notify
-        "follow",     // type of notification
-        null,         // postId (null here)
-        followersId,  // sender (who followed)
-        `${user.username} started following you`  // message
+        followingId, 
+        "follow",    
+        null,        
+        followersId, 
+        `${user.username} started following you`  
       );
 
       const updatedUser = await User.findById(followersId).select('-password');

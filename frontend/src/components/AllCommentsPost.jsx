@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { getUserSuggestions } from "@/redux/authActions";
@@ -22,7 +22,7 @@ export default function AllCommentsPost({ postUser, postId, currentUser }) {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`${url}/api/v1/post/${postId}/comment/all`, {
+        const res = await axiosInstance.get(`${url}/api/v1/post/${postId}/comment/all`, {
           withCredentials: true,
         });
         if (res.data.success) {
@@ -73,7 +73,7 @@ export default function AllCommentsPost({ postUser, postId, currentUser }) {
   };
   const handleFollowOrUnfollow = async (authorId) => {
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${url}/api/v1/user/followorunfollow/${authorId}`,
         {},
         { withCredentials: true }

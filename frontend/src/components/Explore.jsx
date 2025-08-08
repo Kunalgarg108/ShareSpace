@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
 import { Loader2, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Post from "@/components/Post";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -14,7 +14,7 @@ export default function Explore() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const res = await axios.get(`${url}/api/v1/post/all`, { withCredentials: true });
+                const res = await axiosInstance.get(`${url}/api/v1/post/all`, { withCredentials: true });
                 setPosts(res.data.posts);
             } catch (err) {
                 console.error("Failed to fetch posts:", err);
