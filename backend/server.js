@@ -15,7 +15,7 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: ["https://sharespace-ruddy.vercel.app"],
+  origin: process.env.FRONTEND_URL,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));

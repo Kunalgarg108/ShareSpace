@@ -8,12 +8,12 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors:{
-        origin:process.env.URL,
+        origin:process.env.FRONTEND_URL,
         methods:['GET','POST']
     }
 })
 
-const userSocketMap = {} ; // this map stores socket id corresponding the user id; userId -> socketId
+const userSocketMap = {} ;
 
 export const getReceiverSocketId = (receiverId) => userSocketMap[receiverId];
 
