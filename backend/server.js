@@ -14,26 +14,11 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins = [
-  "https://sharespace-ruddy.vercel.app", // frontend prod
-  "http://localhost:3000"                // local dev
-];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error("Not allowed by CORS"));
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  origin: "http://localhost:5173",
   credentials: true
 }));
 
-// This must be after the cors() call
-app.options("*", cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
