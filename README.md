@@ -1,7 +1,6 @@
 # 📱 ShareSpace
 
-A **full-stack social media web application** built using the **MERN stack** with **real-time messaging**, **AI-powered voice navigation**, and **modern UI**.  
-ShareSpace is designed to connect people instantly while offering a clean, responsive, and interactive experience.
+A **full-stack Social Media web application** built using the **MERN stack** with **real-time messaging**, **AI-powered Features**, **post functionality**, and **modern UI**.  ShareSpace is designed to connect people instantly while offering a clean, responsive, and interactive experience.
 
 ---
 
@@ -10,17 +9,14 @@ ShareSpace is designed to connect people instantly while offering a clean, respo
 - **Real-time Messaging**  
   Powered by **Socket.io** for instant chats, typing indicators, and live user presence.
   
-- **AI-Powered Voice Navigation**  
-  Integrated with Google Dialogflow for seamless **voice commands** to navigate the app hands-free.
+- **AI-Powered Features**  
+  Integrated with Google Dialogflow for seamless voice commands to navigate the app hands-free, and Google Perspective API for abusive content detection and filtering.
 
-- **Abusive Language Filtering**  
-  Automatic detection and filtering of inappropriate language in chats and posts.
-
-- **Live Online/Offline Status Tracking**  
-  Displays real-time availability of friends and connections.
+- **Multiple Feature Pages**  
+  Created separate, fully functional pages including **Home**, **Message**, **Search**, **Profile**, **Edit Profile**, **Explore**, and more for smooth navigation and better user experience.
 
 - **Responsive & Mobile-First Design**  
-  Built with **Tailwind CSS** and **Radix UI** for a smooth and adaptive interface.
+  Built with **Tailwind CSS** and **shadcn/ui** for a smooth and adaptive interface.
 
 - **State Management with Redux Toolkit**  
   Centralized, efficient, and predictable state handling.
@@ -30,27 +26,26 @@ ShareSpace is designed to connect people instantly while offering a clean, respo
 ## 🛠 Tech Stack
 
 ### **Frontend**
-- React 19
-- Vite
+- React(Vite)
 - Tailwind CSS
-- Radix UI Components
+- shadcn/ui
 - Redux Toolkit + Redux Persist
 - Socket.io Client
-- React Router DOM
 - Axios
-- Emoji Picker, Lucide Icons, React Icons
+- Emoji Picker, Lucide Icons, React Icon
+- Google Perspective API
 
 ### **Backend**
 - Node.js + Express 5
-- MongoDB + Mongoose
+- Mongoose
 - Socket.io
 - JWT Authentication
-- Multer & Cloudinary (Image Uploads)
+- Multer & Cloudinary
 - Sharp (Image Optimization)
-- Bcrypt.js (Password Hashing)
-- Google Dialogflow (Voice Navigation)
+- Google Dialogflow
 
 ---
+
 
 
 
