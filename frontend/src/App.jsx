@@ -32,7 +32,7 @@ function App() {
   };
   useEffect(() => {
     if (user) {
-      const socketio = io("http://localhost:3000", {
+      const socketio = io(import.meta.env.VITE_API_URL, {
         query: { userId: user._id },
         transports: ["websocket"],
         withCredentials: true,
