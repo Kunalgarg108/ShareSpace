@@ -75,7 +75,7 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie('token', { httpOnly: true, sameSite: 'Strict', maxAge: 0 });
+    res.clearCookie('token', { httpOnly: true, sameSite: 'None', maxAge: 0 });
     return res.status(200).json({ success: true, message: "Logout successful" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error", error: error.message });
