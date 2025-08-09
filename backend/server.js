@@ -14,8 +14,22 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
+const allowedOrigins = [
+  "https://sharespace-ruddy.vercel.app",
+  "https://sharespace-1tvsqrxuk-kunal-kumar-gargs-projects.vercel.app"
+];
+
 app.use(cors({
-  origin: "https://sharespace-ruddy.vercel.app",
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 
