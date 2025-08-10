@@ -38,6 +38,16 @@ function App() {
         withCredentials: true,
       });
       dispatch(setSocket(socketio));
+      socket.on("connect_error", (err) => {
+        // the reason of the error, for example "xhr poll error"
+        console.log(err.message);
+      
+        // some additional description, for example the status code of the initial HTTP response
+        console.log(err.description);
+      
+        // some additional context, for example the XMLHttpRequest object
+        console.log(err.context);
+      });
       socketio.on("connect", () => {
         console.log("Connected to socket server");
       });
