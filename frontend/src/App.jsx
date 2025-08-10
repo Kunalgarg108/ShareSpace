@@ -38,7 +38,7 @@ function App() {
         withCredentials: true,
       });
       dispatch(setSocket(socketio));
-      socket.on("connect_error", (err) => {
+      socketio.on("connect_error", (err) => {
         // the reason of the error, for example "xhr poll error"
         console.log(err.message);
       
