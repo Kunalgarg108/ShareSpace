@@ -15,9 +15,10 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: "*",
+  origin: "https://sharespace-ruddy.vercel.app",
   credentials: true
 }));
+
 
 app.use(cookieParser());
 app.use(express.json());
