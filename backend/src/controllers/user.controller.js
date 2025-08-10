@@ -67,7 +67,7 @@ export const login = async (req, res) => {
       bookmarks: user.bookmarks,
       likedPosts: user.likedPosts,
     }
-    return res.cookie('token', token, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 }).status(200).json({ success: true, message: "Login successful", user });
+    return res.cookie('token', token, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 , secure : true}).status(200).json({ success: true, message: "Login successful", user });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
@@ -75,7 +75,7 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie('token', { httpOnly: true, sameSite: 'None', maxAge: 0 });
+    res.clearCookie('token', { httpOnly: true, sameSite: 'None', maxAge: 0 , secure : true });
     return res.status(200).json({ success: true, message: "Logout successful" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error", error: error.message });
